@@ -1,0 +1,10 @@
+# Packages
+venv/
+
+# PyCharm/Intellij IDEA/VSCode
+.idea/
+.vscode/
+
+# General
+log/
+*.log
