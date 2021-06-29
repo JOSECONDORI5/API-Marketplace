@@ -8,33 +8,26 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
-class TestUserSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=200)
-    email = serializers.EmailField()
+    def create(self, validated_data):
+        user = User(**validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
 
-    def validate_name(self, value):
-        # Custom validation
-        if 'developer' in value:
-            raise serializers.ValidationError('Error, no puede existir un usuario con ese nombre')
+    def update(self, instance, validated_data):
+        updated_user = super().update(instance, validated_data)
+        updated_user.set_password(validated_data['password'])
+        updated_user.save()
+        return updated_user
 
-        print(self.context)
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
 
-        return value
-
-    def validate_email(self, value):
-        # Custom validation
-        if value == '':
-            raise serializers.ValidationError('Tiene que indicar un correo')
-
-        if self.validate_name(self.context['name']) in value:
-            raise serializers.ValidationError('El email no puede contener el nombre')
-
-        return value
-
-    def validate(self, data):
-        # Custom validation
-        # if data['name'] in data['email']:
-        #     raise serializers.ValidationError('El email no puede contener el nombre')
-        print("Validate general")
-
-        return data
+    def to_representation(self, instance):
+        return {
+            'id': instance['id'],
+            'username': instance['username'],
+            'email': instance['email'],
+            'password': instance['password']
+        }

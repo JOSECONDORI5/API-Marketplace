@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from apps.users.models import User
-from apps.users.api.serializers import UserSerializer, TestUserSerializer
+from apps.users.api.serializers import UserSerializer, UserListSerializer
 
 
 # class UserAPIView(APIView):
@@ -20,19 +20,8 @@ def user_api_view(request):
     # List
     if request.method == 'GET':
         # Queryset
-        users = User.objects.all()
-        users_serializer = UserSerializer(users, many=True)
-
-        test_data = {
-            'name': 'develop',
-            'email': 'developer@mail.com'
-        }
-
-        test_user = TestUserSerializer(data=test_data, context=test_data)
-        if test_user.is_valid():
-            print("Pasó validaciones")
-        else:
-            print(test_user.errors)
+        users = User.objects.all().values('id', 'username', 'email', 'password', 'name')
+        users_serializer = UserListSerializer(users, many=True)
 
         return Response(users_serializer.data, status=status.HTTP_200_OK)
 
