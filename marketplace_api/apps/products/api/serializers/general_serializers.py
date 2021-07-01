@@ -1,12 +1,13 @@
-from marketplace_api.apps.products.models import MeasureUnit, CategoryProduct, Indicador
+from apps.products.models import MeasureUnit, CategoryProduct, Indicator
 
-from marketplace_api import serializers
+from rest_framework import serializers
+
 
 class MeasureUnitSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = MeasureUnit
-        exclude = ('state',)
+        exclude = ('state', 'created_date', 'modified_date', 'deleted_date')
     
 class CategoryProductSerializer(serializers.ModelSerializer):
     
@@ -14,8 +15,8 @@ class CategoryProductSerializer(serializers.ModelSerializer):
         model = CategoryProduct
         exclude = ('estate',)
     
-class IndicadorSerializer(serializers.ModelSerializer):
+class IndicatorSerializer(serializers.ModelSerializer):
     
     class Meta:
-        model = Indicador
-        exclude = ('state')
+        model = Indicator
+        exclude = ('state', 'created_date', 'modified_date', 'deleted_date')

@@ -58,11 +58,11 @@ class CategoryProduct(BaseModel):
 
 
 # This class indicates which offer is assigned to which product category
-class Indicador(BaseModel):
+class Indicator(BaseModel):
     """Model definition for Indicador."""
 
     # TODO: Define fields here
-    descount_value = models.PositiveSmallIntegerField(default=0)
+    discount_value = models.PositiveSmallIntegerField(default=0)
     category_product = models.ForeignKey(CategoryProduct, on_delete=models.CASCADE, verbose_name='Indicador de Oferta')
     historical = HistoricalRecords()
     
@@ -75,7 +75,7 @@ class Indicador(BaseModel):
         self.changed_by = value
 
     class Meta:
-        """Meta definition for Indicador."""
+        """Meta definition for Indicator."""
 
         verbose_name = 'Indicador de Oferta'
         verbose_name_plural = 'Indicadores de Ofertas'
@@ -105,8 +105,8 @@ class Product(models.Model):
     class Meta:
         """Meta definition for Product."""
 
-        verbose_name = 'Product'
-        verbose_name_plural = 'Products'
+        verbose_name = 'Producto'
+        verbose_name_plural = 'Productos'
 
     def __str__(self):
         """Unicode representation of Product."""

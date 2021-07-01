@@ -1,10 +1,9 @@
-from marketplace_api.apps.products.models import Product
+from apps.products.models import Product
 
-from marketplace_api import serializers
+from rest_framework import serializers
 
 class ProductSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Product
         exclude = ('state',)
-        
