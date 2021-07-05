@@ -35,7 +35,6 @@ class CategoryProduct(BaseModel):
 
     # TODO: Define fields here
     description = models.CharField('Descripcion', max_length=50, blank=False, unique=True)
-    measure_unit = models.ForeignKey(MeasureUnit, on_delete=models.CASCADE, verbose_name='Unidad de Medidda')
     historical = HistoricalRecords()
 
     @property
@@ -85,13 +84,15 @@ class Indicator(BaseModel):
         return f'Oferta de la Categoria {self.category_product}: {self.descount_value}%'
 
 
-class Product(models.Model):
+class Product(BaseModel):
     """Model definition for Product."""
 
     # TODO: Define fields here
     name = models.CharField('Nombre de producto', max_length=150, unique=True, blank=False, null=False)
     description = models.TextField('Description del producto', blank=False, null=False)
     image = models.ImageField('Imagen del producto', upload_to='products/', blank=True, null=True)
+    measure_unit = models.ForeignKey(MeasureUnit, on_delete=models.CASCADE, verbose_name='Unidad de Medida', null=True)
+    category_product = models.ForeignKey(CategoryProduct, on_delete=models.CASCADE, verbose_name='Categoría de Producto', null=True)
     historical = HistoricalRecords()
     
     @property
