@@ -13,6 +13,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         exclude = ('state', 'created_date', 'modified_date', 'deleted_date')
+        # fields = ['id', 'name']
 
     def to_representation(self, instance):
         return {
