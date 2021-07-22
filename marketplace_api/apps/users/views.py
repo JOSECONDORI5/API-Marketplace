@@ -9,6 +9,20 @@ from rest_framework.views import APIView
 
 from apps.users.api.serializers import UserTokenSerializer
 
+class UserToken(APIView):
+    def get(self, request, *args, **kwargs):
+        username = request.GET.get('username')
+        try:
+            user_token = Token.objects.get(
+                user = UserTokenSerializer().Meta.model.objects.filter(username=username).first()
+            )
+            return Response({
+                'token': user_token.key
+            })
+        except:
+            return Response({
+                'error': 'Credenciales enviados incorrectas.'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 class Login(ObtainAuthToken):
 

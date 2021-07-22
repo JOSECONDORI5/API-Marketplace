@@ -17,6 +17,7 @@ class ProductViewSet(Authentication, viewsets.ModelViewSet):
 
     def list(self, request):
         product_serializer = self.get_serializer(self.get_queryset(), many=True)
+        # print(self.user)
         return Response(product_serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):

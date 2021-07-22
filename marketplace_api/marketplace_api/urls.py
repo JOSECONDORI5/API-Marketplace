@@ -17,7 +17,7 @@ from django.contrib import admin
 from rest_framework import permissions
 from django.urls import path, include, re_path
 
-from apps.users.views import Login, Logout
+from apps.users.views import Login, Logout, UserToken
 
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -40,9 +40,11 @@ urlpatterns = [
     path(r'swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path(r'redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
-    path('', Login.as_view(), name='login'),
+    path('login/', Login.as_view(), name='login'),
+    path('refresh-token/', UserToken.as_view(), name='refresh_token'),
     path('logout/', Logout.as_view(), name='logout'),
     path('usuario/', include('apps.users.api.urls')),
     # path('products/', include('apps.products.api.urls')),
     path('products/', include('apps.products.api.routers'))
 ]
+

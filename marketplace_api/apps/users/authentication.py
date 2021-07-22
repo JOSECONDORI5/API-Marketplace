@@ -40,6 +40,7 @@ class ExpiringTokenAuthentication(TokenAuthentication):
             user = token.user
         except self.get_model().DoesNotExist:
             message = 'Token inválido.'
+            self.expired = True
             # return message
             # raise AuthenticationFailed('Token inválido.')
         if token is not None:
