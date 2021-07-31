@@ -12,7 +12,7 @@ SECRET_KEY = 'django-insecure-%)wu-b5c8oa$x-m4zc&u&z%s2#e24d0nq+k_5#$q#y(i#gka)$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -113,13 +113,15 @@ USE_TZ = True
 # Define your user model
 AUTH_USER_MODEL = 'users.User'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8100",
+# ]
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",
-]
+# CORS_ORIGIN_WHITELIST = [
+#     "http://localhost:8100",
+# ]
+
+ALLOWED_HOSTS = ['*']
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
