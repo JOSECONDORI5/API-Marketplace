@@ -8,7 +8,7 @@ from apps.users.authentication import ExpiringTokenAuthentication
 class Authentication(object):
 
     user = None
-    user_token_expired = False
+    # user_token_expired = False
 
     def get_user(self, request):
         token = get_authorization_header(request).split()
@@ -21,13 +21,13 @@ class Authentication(object):
             token_expire = ExpiringTokenAuthentication()
             # try:
             #     user, token = token_expire.authenticate_credentials(token)
-            user, token, message, self.user_token_expired = token_expire.authenticate_credentials(token)
+            user = token_expire.authenticate_credentials(token)
 
-            if user is not None and token is not None:
+            if user is not None:
                 self.user = user
                 return user
 
-            return message
+            # return message
             # print(token)
             # except:
             #     message = token_expire.authenticate_credentials(token)
@@ -38,18 +38,18 @@ class Authentication(object):
         user = self.get_user(request)
         # Found token in request
         if user is not None:
-            if type(user) == str:
-                response = Response({
-                    'error': user,
-                    'expired': self.user_token_expired
-                }, status=status.HTTP_400_BAD_REQUEST)
-                response.accepted_renderer = JSONRenderer()
-                response.accepted_media_type = 'application/json'
-                response.renderer_context = {}
-                return response
+            # if type(user) == str:
+            #     response = Response({
+            #         'error': user,
+            #         'expired': self.user_token_expired
+            #     }, status=status.HTTP_400_BAD_REQUEST)
+            #     response.accepted_renderer = JSONRenderer()
+            #     response.accepted_media_type = 'application/json'
+            #     response.renderer_context = {}
+            #     return response
 
-            if not self.user_token_expired:
-                return super().dispatch(request, *args, **kwargs)
+            # if not self.user_token_expired:
+            return super().dispatch(request, *args, **kwargs)
 
         response = Response({
             'error': 'No se han enviado las credenciales.',

@@ -8,16 +8,22 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.users.api.serializers import UserTokenSerializer
+from apps.users.authentication_mixins import Authentication
 
-class UserToken(APIView):
+
+class UserToken(APIView, Authentication):
     def get(self, request, *args, **kwargs):
-        username = request.GET.get('username')
+        # username = request.GET.get('username')
+
         try:
-            user_token = Token.objects.get(
-                user = UserTokenSerializer().Meta.model.objects.filter(username=username).first()
-            )
+            user_token = Token.objects.get_or_create(user=self.user)
+                # user=UserTokenSerializer().Meta.model.objects.filter(
+                #                                     username=self.user.username).first()
+            #)
+            user = UserTokenSerializer(self.user)
             return Response({
-                'token': user_token.key
+                'token': user_token.key,
+                'user': user.data
             })
         except:
             return Response({

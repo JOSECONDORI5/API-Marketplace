@@ -9,7 +9,7 @@ from django.conf import settings
 
 class ExpiringTokenAuthentication(TokenAuthentication):
 
-    expired = False
+    # expired = False
 
     # Calculate token expired time
     def expires_in(self, token):
@@ -25,36 +25,38 @@ class ExpiringTokenAuthentication(TokenAuthentication):
     def token_expire_handler(self, token):
         is_expire = self.is_token_expired(token)
         if is_expire:
-            self.expired = True
+            # self.expired = True
             # print('TOKEN EXPIRADO')
             user = token.user
             token.delete()
             token = self.get_model().objects.create(user=token.user)
-        return is_expire, token
+        return token
 
     # Get credentials of token
     def authenticate_credentials(self, key):
-        message, token, user = None, None, None
+        token, user = None, None
         try:
             token = self.get_model().objects.select_related('user').get(key=key)
             user = token.user
+            token = self.token_expire_handler(token)
         except self.get_model().DoesNotExist:
-            message = 'Token inválido.'
-            self.expired = True
-            # return message
-            # raise AuthenticationFailed('Token inválido.')
-        if token is not None:
-            if not token.user.is_active:
-                message = 'Usuario no activo o eliminado.'
-                # return message
-                # raise AuthenticationFailed('Usuario no activo o eliminado.')
-
-            is_expired = self.token_expire_handler(token)
-
-            if is_expired:
-                message = 'Su token ha expirado.'
-                # return message
-                # raise AuthenticationFailed('Su token ha expirado.')
-
-        # return token.user, token
-        return user, token, message, self.expired
+            pass
+        #     message = 'Token inválido.'
+        #     self.expired = True
+        #     # return message
+        #     # raise AuthenticationFailed('Token inválido.')
+        # if token is not None:
+        #     if not token.user.is_active:
+        #         message = 'Usuario no activo o eliminado.'
+        #         # return message
+        #         # raise AuthenticationFailed('Usuario no activo o eliminado.')
+        #
+        #     is_expired = self.token_expire_handler(token)
+        #
+        #     if is_expired:
+        #         message = 'Su token ha expirado.'
+        #         # return message
+        #         # raise AuthenticationFailed('Su token ha expirado.')
+        #
+        # # return token.user, token
+        return user
